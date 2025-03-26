@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoWorld - Галерея</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Иконки Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Кастомный CSS -->
+    <style>
+        :root {
+            --bg-dark: #2a2d34;
+            --bg-card: #373b47;
+            --bg-section: #313440;
+            --accent: #ff7d00;
+            --text-main: #e8e9eb;
+            --text-muted: #a3a8b8;
+            --text-secondary: #c4c8d4;
+            --border: #444954;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 80px;
+        }
+        
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        .gallery-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1580310614655-644a4b56f1e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 8rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .gallery-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--bg-dark));
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            height: 100%;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+        
+        .image-container {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+        
+        .filter-buttons {
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            margin: 5px;
+            transition: all 0.3s;
+            border-width: 2px;
+            color: var(--text-secondary);
+            border-color: var(--accent);
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-primary {
+            color: var(--accent);
+            border-color: var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .navbar-dark {
+            background-color: rgba(42, 45, 52, 0.9) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-close {
+            filter: invert(1);
+        }
+        
+        .title-underline {
+            height: 4px;
+            width: 80px;
+            background: linear-gradient(to right, var(--accent), transparent);
+            margin: 15px auto 30px;
+            border-radius: 2px;
+        }
+        
+        .section-title {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        footer p, footer li {
+            color: var(--text-muted) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="bi bi-bicycle"></i> MotoWorld
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">Главная</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Мотоциклы
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="page.html">Harley-Davidson</a></li>
+                            <li><a class="dropdown-item" href="page2.html">Yamaha R1</a></li>
+                            <li><a class="dropdown-item" href="page3.html">Ducati Monster</a></li>
+                            <li><a class="dropdown-item" href="page4.html">Honda CBR</a></li>
+                            <li><a class="dropdown-item" href="page5.html">Kawasaki Ninja</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="page6.html">Галерея</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#contact">Контакты</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Хиро секция -->
+    <section class="gallery-hero text-center">
+        <div class="container">
+            <h1 class="display-3 fw-bold section-title">Галерея мотоциклов</h1>
+            <p class="lead">Лучшие моменты и самые красивые модели</p>
+            <div class="title-underline mx-auto"></div>
+        </div>
+    </section>
+
+    <!-- Основное содержимое -->
+    <div class="container mb-5">
+        <!-- Фильтры -->
+        <div class="text-center filter-buttons">
+            <button class="btn filter-btn active" data-filter="all">Все</button>
+            <button class="btn filter-btn" data-filter="harley">Harley-Davidson</button>
+            <button class="btn filter-btn" data-filter="yamaha">Yamaha</button>
+            <button class="btn filter-btn" data-filter="ducati">Ducati</button>
+            <button class="btn filter-btn" data-filter="honda">Honda</button>
+            <button class="btn filter-btn" data-filter="kawasaki">Kawasaki</button>
+        </div>
+
+        <!-- Галерея -->
+        <div class="row g-4 gallery-container">
+            <!-- Harley-Davidson -->
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="harley">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/5.png" alt="Harley-Davidson 1">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Harley-Davidson</h5>
+                        <p>Классический чоппер</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="harley">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/2.png" alt="Harley-Davidson 2">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Harley-Davidson</h5>
+                        <p>Модель Road King</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Yamaha -->
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="yamaha">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/10.png" alt="Yamaha R1 1">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Yamaha R1</h5>
+                        <p>Спортивный флагман</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="yamaha">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/11.png" alt="Yamaha R1 2">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Yamaha R1</h5>
+                        <p>На треке</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ducati -->
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="ducati">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/12.png" alt="Ducati Monster 1">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Ducati Monster</h5>
+                        <p>Итальянский стиль</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="ducati">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/13.png" alt="Ducati Monster 2">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Ducati Monster</h5>
+                        <p>Городские улицы</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Honda -->
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="honda">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/8.png" alt="Honda CBR 1">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Honda CBR</h5>
+                        <p>Спортивный дизайн</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="honda">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/9.png" alt="Honda CBR 2">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Honda CBR</h5>
+                        <p>На шоссе</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kawasaki -->
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="kawasaki">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/14.png" alt="Kawasaki Ninja 1">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Kawasaki Ninja</h5>
+                        <p>Зеленый демон</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 gallery-card" data-category="kawasaki">
+                <div class="gallery-item">
+                    <div class="image-container">
+                        <img src="7/15.png" alt="Kawasaki Ninja 2">
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Kawasaki Ninja</h5>
+                        <p>Максимальная скорость</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подвал -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-bicycle"></i> MotoWorld</h5>
+                    <p class="text-muted">Лучшие мотоциклы со всего мира в одном месте.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Контакты</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt"></i> г Брянск. </li>
+                        <li><i class="bi bi-telephone"></i> +7 (915) 807 20 31 </li>
+                        <li><i class="bi bi-envelope"></i> stepaivanim@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+                </div>
+            </div>
+            <hr class="my-4" style="border-color: var(--border);">
+            <div class="text-center">
+                <p class="mb-0 text-muted">&copy; 2025 MotoWorld.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно галереи -->
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="modalImageTitle">Название изображения</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" class="img-fluid rounded" id="modalImage" alt="Gallery Image">
+                </div>
+                <div class="modal-footer border-0">
+                    <p id="modalImageDescription" class="text-secondary mx-auto">Описание изображения</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Фильтрация галереи
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Удаляем активный класс у всех кнопок
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                // Добавляем активный класс текущей кнопке
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                const items = document.querySelectorAll('.gallery-card');
+                
+                items.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Инициализация модального окна галереи
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const imgSrc = this.querySelector('img').src;
+                const title = this.querySelector('h5').textContent;
+                const description = this.querySelector('p').textContent;
+                
+                document.getElementById('modalImage').src = imgSrc;
+                document.getElementById('modalImageTitle').textContent = title;
+                document.getElementById('modalImageDescription').textContent = description;
+                
+                const modal = new bootstrap.Modal(document.getElementById('galleryModal'));
+                modal.show();
+            });
+        });
+        
+        // Анимация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.section-title, .gallery-item');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            document.querySelectorAll('.section-title, .gallery-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            setTimeout(animateOnScroll, 300);
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+</body>
+</html>

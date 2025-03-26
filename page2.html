@@ -1,0 +1,488 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoWorld - Yamaha R1</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Иконки Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Кастомный CSS -->
+    <style>
+        :root {
+            --bg-dark: #2a2d34;
+            --bg-card: #373b47;
+            --bg-section: #313440;
+            --accent: #ff7d00;
+            --text-main: #e8e9eb;
+            --text-muted: #a3a8b8;
+            --text-secondary: #c4c8d4;
+            --border: #444954;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 80px;
+        }
+        
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        .bike-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 8rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .bike-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--bg-dark));
+        }
+        
+        .spec-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .spec-item:hover .spec-icon {
+            transform: scale(1.1);
+        }
+        
+        .spec-item p {
+            color: var(--text-secondary);
+        }
+        
+        .creator-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            height: 100%;
+        }
+        
+        .creator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-body p {
+            color: var(--text-secondary);
+        }
+        
+        .gallery-item {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        
+        .gallery-item img {
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 125, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .gallery-overlay i {
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .btn-outline-primary {
+            color: var(--accent);
+            border-color: var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e67400;
+            border-color: #e67400;
+            transform: translateY(-2px);
+        }
+        
+        .navbar-dark {
+            background-color: rgba(42, 45, 52, 0.9) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+        }
+        
+        .btn-close {
+            filter: invert(1);
+        }
+        
+        .title-underline {
+            height: 4px;
+            width: 80px;
+            background: linear-gradient(to right, var(--accent), transparent);
+            margin: 15px auto 30px;
+            border-radius: 2px;
+        }
+        
+        .section-title {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        p, li {
+            line-height: 1.7;
+        }
+        
+        .lead {
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+        }
+        
+        footer p, footer li {
+            color: var(--text-muted) !important;
+        }
+    </style>
+</head>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="bi bi-bicycle"></i> MotoWorld
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">Главная</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Мотоциклы
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="page.html">Harley-Davidson</a></li>
+                            <li><a class="dropdown-item active" href="page2.html">Yamaha R1</a></li>
+                            <li><a class="dropdown-item" href="page3.html">Ducati Monster</a></li>
+                            <li><a class="dropdown-item" href="page4.html">Honda CBR</a></li>
+                            <li><a class="dropdown-item" href="page5.html">Kawasaki Ninja</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="page6.html">Галерея</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#contact">Контакты</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Хиро секция -->
+    <section class="bike-hero text-center">
+        <div class="container">
+            <h1 class="display-3 fw-bold section-title">Yamaha R1</h1>
+            <p class="lead">Японская инженерная легенда</p>
+            <div class="title-underline mx-auto"></div>
+        </div>
+    </section>
+
+    <!-- Основное содержимое -->
+    <div class="container mb-5">
+        <!-- О мотоцикле -->
+        <section class="row align-items-center mb-5">
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4 section-title">Спортивный флагман Yamaha</h2>
+                <p class="lead">Yamaha YZF-R1 - вершина инженерной мысли японского мотостроения.</p>
+                <p class="text-secondary">С момента своего появления в 1998 году, R1 установил новые стандарты в классе спортивных мотоциклов. Его революционный дизайн и передовые технологии сделали его фаворитом среди гонщиков.</p>
+                <p class="text-secondary">Современные модели R1 оснащены электронными системами помощи, включая трекшн-контроль, антиблокировочную систему тормозов и быстросменные передачи.</p>
+                <a href="#specs" class="btn btn-primary mt-3">Технические характеристики</a>
+            </div>
+            <div class="col-lg-6">
+                <img src="главная/1.png" alt="Yamaha R1" class="img-fluid rounded shadow-lg">
+            </div>
+        </section>
+
+        <!-- Характеристики -->
+        <section id="specs" class="py-5 mb-5 rounded" style="background-color: var(--bg-section);">
+            <div class="container">
+                <h2 class="text-center fw-bold mb-5 section-title">Технические характеристики</h2>
+                <div class="row g-4">
+                    <div class="col-md-4 text-center spec-item">
+                        <div class="spec-icon">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+                        <h4>Макс. скорость</h4>
+                        <p>300 км/ч</p>
+                    </div>
+                    <div class="col-md-4 text-center spec-item">
+                        <div class="spec-icon">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <h4>Мощность</h4>
+                        <p>200 л.с. @ 13,500 rpm</p>
+                    </div>
+                    <div class="col-md-4 text-center spec-item">
+                        <div class="spec-icon">
+                            <i class="bi bi-gear-wide"></i>
+                        </div>
+                        <h4>Крутящий момент</h4>
+                        <p>113 Нм @ 11,500 rpm</p>
+                    </div>
+                    <div class="col-md-4 text-center spec-item">
+                        <div class="spec-icon">
+                            <i class="bi bi-droplet"></i>
+                        </div>
+                        <h4>Двигатель</h4>
+                        <p>4-цилиндровый, 998 cc</p>
+                    </div>
+                    <div class="col-md-4 text-center spec-item">
+                        <div class="spec-icon">
+                            <i class="bi bi-brightness-high"></i>
+                        </div>
+                        <h4>Расход топлива</h4>
+                        <p>6.9 л/100 км</p>
+                    </div>
+                    <div class="col-md-4 text-center spec-item">
+                        <div class="spec-icon">
+                            <i class="bi bi-arrow-up-right"></i>
+                        </div>
+                        <h4>Разгон 0-100</h4>
+                        <p>2.7 сек</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- История и создатели -->
+        <section class="mb-5">
+            <h2 class="fw-bold text-center mb-5 section-title">История и технологии</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm creator-card">
+                        <div class="card-body">
+                            <h3 class="card-title">Разработка R1</h3>
+                            <p class="text-secondary">Первый Yamaha YZF-R1 был представлен в 1998 году как ответ на Honda CBR900RR. Инженеры Yamaha во главе с Кунхико Миура создали революционный для своего времени мотоцикл.</p>
+                            <p class="text-secondary">Особенностью R1 стало использование технологии "Genesis" - двигатель с обратным наклоном цилиндров, что позволило сделать мотоцикл более компактным и улучшить развесовку.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm creator-card">
+                        <div class="card-body">
+                            <h3 class="card-title">Эволюция модели</h3>
+                            <p class="text-secondary">За более чем 20 лет существования, R1 претерпел множество изменений. В 2004 году появилась система впрыска топлива, в 2009 - система изменения фаз газораспределения.</p>
+                            <p class="text-secondary">Современные R1 активно участвуют в мировых чемпионатах по супербайку, демонстрируя превосходные характеристики.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Галерея модели -->
+        <section class="mb-5">
+            <h2 class="fw-bold text-center mb-4 section-title">Галерея Yamaha R1</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <a href="#!" class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="3/16.png" class="img-fluid rounded" alt="Yamaha R1 1">
+                        <div class="gallery-overlay">
+                            <i class="bi bi-zoom-in"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#!" class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="3/17.png" class="img-fluid rounded" alt="Yamaha R1 2">
+                        <div class="gallery-overlay">
+                            <i class="bi bi-zoom-in"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#!" class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="3/18.png" class="img-fluid rounded" alt="Yamaha R1 3">
+                        <div class="gallery-overlay">
+                            <i class="bi bi-zoom-in"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Другие модели -->
+        <section>
+            <h2 class="fw-bold text-center mb-4 section-title">Другие модели</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm creator-card">
+                        <img src="главная/Harlei.png" class="card-img-top" alt="Harley-Davidson">
+                        <div class="card-body">
+                            <h5 class="card-title">Harley-Davidson</h5>
+                            <p class="text-secondary">Американская легенда с характерным звуком двигателя.</p>
+                            <a href="page.html" class="btn btn-outline-primary">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm creator-card">
+                        <img src="главная/ducati.png" class="card-img-top" alt="Ducati Monster">
+                        <div class="card-body">
+                            <h5 class="card-title">Ducati Monster</h5>
+                            <p class="text-secondary">Итальянская страсть и непревзойденный дизайн.</p>
+                            <a href="page3.html" class="btn btn-outline-primary">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm creator-card">
+                        <img src="главная/honda.png" class="card-img-top" alt="Honda CBR">
+                        <div class="card-body">
+                            <h5 class="card-title">Honda CBR</h5>
+                            <p class="text-secondary">Японская надежность и передовые технологии.</p>
+                            <a href="page4.html" class="btn btn-outline-primary">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Подвал -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-bicycle"></i> MotoWorld</h5>
+                    <p class="text-muted">Лучшие мотоциклы со всего мира в одном месте.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Контакты</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt"></i> г Брянск. </li>
+                        <li><i class="bi bi-telephone"></i> +7 (915) 807 20 31 </li>
+                        <li><i class="bi bi-envelope"></i> stepaivanim@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4" style="border-color: var(--border);">
+            <div class="text-center">
+                <p class="mb-0 text-muted">&copy; 2025 MotoWorld.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно галереи -->
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" class="img-fluid rounded" id="galleryImage" alt="Gallery Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Инициализация галереи
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', event => {
+                const imgSrc = event.currentTarget.querySelector('img').src;
+                document.getElementById('galleryImage').src = imgSrc;
+            });
+        });
+        
+        // Анимация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.section-title, .creator-card, .spec-item');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            document.querySelectorAll('.section-title, .creator-card, .spec-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            setTimeout(animateOnScroll, 300);
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+</body>
+</html>
